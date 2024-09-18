@@ -83,3 +83,65 @@ void printSuccessMessage({required TransactionTypes transactionType, required St
   if (newBalance != null) print("-- NEW BALANCE: $newBalance");
   stdout.write("\n");
 }
+
+void uiTransferMoney(User user, List<User> users) async {
+  String? recipient;
+  String? iamount;
+
+  User? targetUser;
+  double amount = 0;
+
+  bool session = true;
+
+  while (session) {
+    while (targetUser == null) {
+      print("**** TRANSFER MONEY ****");
+      print("- Type '-1' to terminate transaction.\n");
+
+      stdout.write("ENTER USER ID: ");
+      recipient = stdin.readLineSync();
+
+      if (recipient == "-1") {
+        print(">> TRANSFER MONEY TERMINATED.\n");
+        session = false;
+      }
+      else if (recipient == user.getId) {
+        stderr.writeln("!! You cannot transfer money to yourself.\n");
+      }
+      else {
+        try {
+          targetUser = findUser(users: users, id: recipient!);
+        } catch (e) {
+          stderr.writeln(">> Please enter a user id to send money to.\n");
+          targetUser = null;
+        }
+      }
+    }
+
+    stdout.write("ENTER AMOUNT TO TRANSFER: ");
+    iamount = stdin.readLineSync();
+
+    amount = double.tryParse(iamount!) ?? 0.0;
+
+    if (amount == -1) {
+      print(">> TRANSFER MONEY TERMINATED.\n");
+      session = false;
+    }
+    else if (amount <= 0) {
+      stderr.writeln(">> Transferred amount cannot be less than or equal to 0.\n");
+    }
+    else {
+      try {
+        session = !transferMoney(
+            users: users,
+            sender: user,
+            recipientId: targetUser.getId,
+            amount: amount
+        );
+      }
+      catch (e) {
+        amount = 0.0;
+      }
+    }
+  }
+}
