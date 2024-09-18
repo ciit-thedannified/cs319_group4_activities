@@ -182,3 +182,75 @@ void uiWithdrawCash(User user) {
     }
   } while (session);
 }
+
+void uiChangePinCode(User user) {
+  String? oldCode;
+  String? newCode;
+  String? confirmPrompt;
+  bool confirm = false;
+  RegExp validPinPattern = RegExp(r'^[0-9]{4}$');
+  bool session = true;
+
+  while (session) {
+    // PROMPT CURRENT USER PIN CODE
+    do {
+      print("**** CHANGE PIN CODE ****");
+      print("- Type '-1' to terminate transaction.\n");
+
+      stdout.write("ENTER CURRENT PIN: ");
+      oldCode = stdin.readLineSync();
+
+      if (oldCode == '-1') {
+        print(">> CHANGE PIN TERMINATED.\n");
+        session = false;
+      }
+      else if (oldCode == null || !validPinPattern.hasMatch(oldCode)) {
+        stderr.write(">> Please enter your current 4-digit PIN code.");
+      }
+    } while (session && !validPinPattern.hasMatch(oldCode!));
+
+    // PROMPT NEW USER PIN CODE
+    while (session && !validPinPattern.hasMatch(newCode ?? "")) {
+      stdout.write("ENTER NEW PIN: ");
+      newCode = stdin.readLineSync();
+
+      if (newCode == '-1') {
+        print(">> CHANGE PIN TERMINATED.\n");
+        session = false;
+      }
+      else if (newCode == null || !validPinPattern.hasMatch(newCode)) {
+        stderr.write(">> Please enter a valid 4-digit PIN code.");
+      }
+    }
+
+    while (session) {
+      print("!!!! PIN CHANGE CONFIRMATION !!!!");
+      print(">> You are about to change your current ATM PIN code with a new PIN code.");
+      print(">> Are you sure of this change? Enter 'y' to confirm. Otherwise, type any character.");
+      stdout.write("ENTER CONFIRMATION: ");
+
+      confirmPrompt = stdin.readLineSync() ?? "";
+      confirm = confirmPrompt.toLowerCase() == 'y';
+      session = false;
+    }
+  }
+
+  try {
+    if (!confirm) return;
+
+    if (user.getPin == oldCode && newCode != null) {
+      changePin(
+        user: user,
+        newCode: newCode,
+      );
+    }
+    else {
+      throw IncorrectPinCodeException();
+    }
+  }
+  on IncorrectPinCodeException catch (e) {
+    print("********** INCORRECT PIN CODE **********");
+    stderr.writeln(">> STATUS: FAILED");
+    stderr.writeln("-- MESSAGE: $e\n");
+  }
+}
