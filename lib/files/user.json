@@ -1,0 +1,23 @@
+[
+  {
+    "id": "1",
+    "pin": "1100",
+    "balance": 1000.0,
+    "locked": false,
+    "transactions": []
+  },
+  {
+    "id": "2",
+    "pin": "5678",
+    "balance": 1000.0,
+    "locked": false,
+    "transactions": []
+  },
+  {
+    "id": "3",
+    "pin": "5820",
+    "balance": 100.0,
+    "locked": false,
+    "transactions": []
+  }
+]
