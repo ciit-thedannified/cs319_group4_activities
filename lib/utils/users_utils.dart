@@ -5,7 +5,7 @@ import 'dart:convert';
 
 import '../classes/user.dart';
 
-export 'package:cs319_assignment_activity1/utils/users_utils.dart';
+export 'package:cs319_group4_activities/utils/users_utils.dart';
 
 const userFilename = "./lib/files/user.json";
 

@@ -7,7 +7,7 @@ import '../exceptions/transaction_exceptions.dart';
 import '../utils/transactions_utils.dart';
 import '../classes/user.dart';
 
-export 'package:cs319_assignment_activity1/utils/transactions_ui.dart';
+export 'package:cs319_group4_activities/utils/transactions_ui.dart';
 
 void uiPayBills(User user) {
   String? biller;

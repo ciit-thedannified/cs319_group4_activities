@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:cs319_assignment_activity1/classes/user.dart';
+import 'package:cs319_group4_activities/classes/user.dart';
 
-import 'package:cs319_assignment_activity1/utils/transactions_ui.dart';
-import 'package:cs319_assignment_activity1/utils/transactions_utils.dart';
-import 'package:cs319_assignment_activity1/utils/users_utils.dart';
+import 'package:cs319_group4_activities/utils/transactions_ui.dart';
+import 'package:cs319_group4_activities/utils/transactions_utils.dart';
+import 'package:cs319_group4_activities/utils/users_utils.dart';
 
 void main() async {
   List<User> users = await initializeUsers();

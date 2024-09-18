@@ -1,7 +1,7 @@
 library exceptions;
 
-import 'package:cs319_assignment_activity1/utils/transactions_utils.dart';
-export 'package:cs319_assignment_activity1/exceptions/transaction_exceptions.dart';
+import 'package:cs319_group4_activities/utils/transactions_utils.dart';
+export 'package:cs319_group4_activities/exceptions/transaction_exceptions.dart';
 
 class IncorrectTransactionException implements Exception {
   final TransactionTypes transactionType;

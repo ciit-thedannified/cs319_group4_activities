@@ -2,10 +2,10 @@ library classes;
 
 import 'dart:convert';
 
-import 'package:cs319_assignment_activity1/exceptions/transaction_exceptions.dart';
-import 'package:cs319_assignment_activity1/utils/transactions_utils.dart';
+import 'package:cs319_group4_activities/exceptions/transaction_exceptions.dart';
+import 'package:cs319_group4_activities/utils/transactions_utils.dart';
 
-export 'package:cs319_assignment_activity1/classes/user.dart';
+export 'package:cs319_group4_activities/classes/user.dart';
 
 class User {
   late String? _id;

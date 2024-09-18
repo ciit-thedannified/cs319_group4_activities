@@ -2,7 +2,7 @@ library utils;
 
 import 'dart:io';
 
-import 'package:cs319_assignment_activity1/utils/transactions_ui.dart';
+import 'package:cs319_group4_activities/utils/transactions_ui.dart';
 
 import '../exceptions/transaction_exceptions.dart';
 import '../classes/user.dart';
