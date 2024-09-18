@@ -145,3 +145,40 @@ void uiTransferMoney(User user, List<User> users) async {
     }
   }
 }
+
+/// User Interface for Withdraw Cash
+void uiWithdrawCash(User user) {
+  String? iamount;
+  double amount = 0;
+  bool session = true;
+
+  /* Prompt the user to enter a valid withdrawal amount
+   * to proceed with cashing out money from their balance.
+   */
+  do {
+    print("**** WITHDRAW CASH ****");
+    print("- Type '-1' to terminate withdrawal.\n");
+
+    stdout.write("ENTER AMOUNT TO WITHDRAW: ");
+    iamount = stdin.readLineSync();
+
+
+    amount = double.tryParse(iamount!) ?? 0.0;
+
+    if (iamount == "-1") {
+      print(">> WITHDRAWAL TERMINATED.\n");
+      session = false;
+    }
+    else if (amount <= 0) {
+      stderr.writeln(">> Withdrawal amount cannot be less than or equal to 0.\n");
+    }
+    else {
+      session = !debitCash(
+          transactionType: TransactionTypes.withdrawCash,
+          user: user,
+          amount: amount,
+          success: "You withdrew $amount from your account."
+      );
+    }
+  } while (session);
+}
