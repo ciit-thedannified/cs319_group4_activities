@@ -183,45 +183,74 @@ void uiWithdrawCash(User user) {
   } while (session);
 }
 
-bool uiPromptPinCode(User user) {
-  int attempts = 0;
-  int maxAttempts = 3;
-  String? inputPin;
+void uiChangePinCode(User user) {
+  String? oldCode;
+  String? newCode;
+  String? confirmPrompt;
+  bool confirm = false;
+  RegExp validPinPattern = RegExp(r'^[0-9]{4}$');
+  bool session = true;
 
-  do {
-    print("\n>> LOG IN TO CONTINUE USING YOUR ATM PIN CODE");
-    print("-- Type '-1' to cancel this process\n");
+  while (session) {
+    // PROMPT CURRENT USER PIN CODE
+    do {
+      print("**** CHANGE PIN CODE ****");
+      print("- Type '-1' to terminate transaction.\n");
 
-    print("NUMBER OF ATTEMPTS: $attempts/$maxAttempts");
-    stdout.write("** ENTER YOUR CURRENT PIN: ");
-    inputPin = stdin.readLineSync();
+      stdout.write("ENTER CURRENT PIN: ");
+      oldCode = stdin.readLineSync();
 
-    if (inputPin == null) {
-      stderr.writeln("!! Please enter a valid ATM pin code.\n");
+      if (oldCode == '-1') {
+        print(">> CHANGE PIN TERMINATED.\n");
+        session = false;
+      }
+      else if (oldCode == null || !validPinPattern.hasMatch(oldCode)) {
+        stderr.write(">> Please enter your current 4-digit PIN code.");
+      }
+    } while (session && !validPinPattern.hasMatch(oldCode!));
+
+    // PROMPT NEW USER PIN CODE
+    while (session && !validPinPattern.hasMatch(newCode ?? "")) {
+      stdout.write("ENTER NEW PIN: ");
+      newCode = stdin.readLineSync();
+
+      if (newCode == '-1') {
+        print(">> CHANGE PIN TERMINATED.\n");
+        session = false;
+      }
+      else if (newCode == null || !validPinPattern.hasMatch(newCode)) {
+        stderr.write(">> Please enter a valid 4-digit PIN code.");
+      }
     }
-    else if (inputPin == "-1") {
-      print(">> LOG IN PROCESS TERMINATED.");
-      return false;
-    }
-    else if (inputPin != user.getPin) {
-      attempts++;
-      stderr.writeln("!! [FAILED] Wrong PIN code entered. (${maxAttempts - attempts} attempts remaining)\n");
-    }
-    else if (inputPin == user.getPin) {
-      print("++ Access Granted!");
-      return true;
-    }
-  } while (attempts <= maxAttempts);
 
-  if (attempts >= maxAttempts) {
-    stderr.writeln("****** ACCOUNT LOCKED ******");
-    stderr.writeln(">> Your account has been locked due to multiple failed PIN code attempts.");
-    stderr.writeln(">> Please contact your bank provider to ask for assistance and unlock your account.");
-    stderr.writeln(">> The terminal will now close...");
+    while (session) {
+      print("!!!! PIN CHANGE CONFIRMATION !!!!");
+      print(">> You are about to change your current ATM PIN code with a new PIN code.");
+      print(">> Are you sure of this change? Enter 'y' to confirm. Otherwise, type any character.");
+      stdout.write("ENTER CONFIRMATION: ");
 
-    user.setLocked = true;
-    return false;
+      confirmPrompt = stdin.readLineSync() ?? "";
+      confirm = confirmPrompt.toLowerCase() == 'y';
+      session = false;
+    }
   }
 
-  return true;
+  try {
+    if (!confirm) return;
+
+    if (user.getPin == oldCode && newCode != null) {
+      changePin(
+        user: user,
+        newCode: newCode,
+      );
+    }
+    else {
+      throw IncorrectPinCodeException();
+    }
+  }
+  on IncorrectPinCodeException catch (e) {
+    print("********** INCORRECT PIN CODE **********");
+    stderr.writeln(">> STATUS: FAILED");
+    stderr.writeln("-- MESSAGE: $e\n");
+  }
 }
