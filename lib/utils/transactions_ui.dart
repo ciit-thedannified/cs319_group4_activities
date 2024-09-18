@@ -254,3 +254,18 @@ void uiChangePinCode(User user) {
     stderr.writeln("-- MESSAGE: $e\n");
   }
 }
+
+/// User Interface for Balance Inquiry
+void uiBalanceInquiry(User user) {
+  var txTime = DateTime.now().toLocal();
+
+  print("**** BALANCE INQUIRY ****");
+  print("Balance: ${user.getBalance}");
+  print("*************************\n");
+
+  user.addTransaction(
+    transactionType: TransactionTypes.balanceInquiry,
+    timestamp: txTime.toString(),
+    message: "Checked Balance Inquiry",
+  );
+}
