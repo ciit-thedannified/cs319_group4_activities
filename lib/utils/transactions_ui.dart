@@ -269,3 +269,32 @@ void uiBalanceInquiry(User user) {
     message: "Checked Balance Inquiry",
   );
 }
+
+/// User Interface for Deposit Money
+void uiDepositMoney(User user) {
+  String? iamount;
+  double amount = 0;
+  bool session = true;
+
+  do {
+    print("**** DEPOSIT MONEY ****");
+    print("- Type '-1' to terminate deposit transaction.\n");
+
+    stdout.write("ENTER AMOUNT TO DEPOSIT: ");
+    iamount = stdin.readLineSync();
+
+    amount = double.tryParse(iamount!) ?? 0;
+
+    if (amount <= 0) {
+      stderr.writeln(">> Deposit amount cannot be less than or equal to 0.\n");
+    }
+    else if (amount == -1) {
+      print(">> DEPOSIT TERMINATED.\n");
+      session = false;
+    }
+    else {
+      depositCash(user: user, amount: amount);
+      session = false;
+    }
+  } while (session);
+}
